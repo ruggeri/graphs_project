@@ -28,6 +28,6 @@ class UndirectedEdge
   def other_vertex(vertex)
     return vertices[1] if vertices[0] == vertex
     return vertices[0] if vertices[1] == vertex
-    raise "vertex is not either end"
+    raise "vertex is at neither end"
   end
 end

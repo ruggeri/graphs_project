@@ -53,4 +53,20 @@ describe UndirectedEdge do
       expect(edge.vertices).to be_nil
     end
   end
+
+  describe '#other_vertex' do
+    it "gets other vertex" do
+      expect(edge.other_vertex(vertex1)).to eq(vertex2)
+    end
+
+    it "gets other vertex again" do
+      expect(edge.other_vertex(vertex2)).to eq(vertex1)
+    end
+
+    it "complains about wrong vertex" do
+      (expect do
+        edge.other_vertex(DirectedVertex.new('bogus vertex'))
+      end).to raise_error("vertex is at neither end")
+    end
+  end
 end
