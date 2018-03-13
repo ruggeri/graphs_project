@@ -1,4 +1,4 @@
-class Vertex
+class DirectedVertex
   attr_reader :value, :in_edges, :out_edges
 
   def initialize(value)
@@ -8,7 +8,7 @@ class Vertex
   end
 end
 
-class Edge
+class DirectedEdge
   attr_reader :from_vertex, :to_vertex, :cost
 
   def initialize(from_vertex, to_vertex, cost = 1)

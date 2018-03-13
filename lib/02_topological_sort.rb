@@ -1,4 +1,4 @@
-require_relative '00_graph'
+require_relative '00_directed_graph'
 
 # Implementing topological sort using both Khan's and Tarian's algorithms
 

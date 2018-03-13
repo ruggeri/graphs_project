@@ -1,9 +1,9 @@
 require 'rspec'
-require '00_graph'
+require '00_directed_graph'
 
-describe Vertex do
+describe DirectedVertex do
   describe '#initialize' do
-    subject(:vertex) { Vertex.new(7) }
+    subject(:vertex) { DirectedVertex.new(7) }
 
     it 'stores a value' do
       expect(vertex.value).to eq(7)
@@ -21,10 +21,10 @@ describe Vertex do
   end
 end
 
-describe Edge do
-  let(:from_vertex) { Vertex.new(nil) }
-  let(:to_vertex) { Vertex.new(nil) }
-  subject(:edge) { Edge.new(from_vertex, to_vertex) }
+describe DirectedEdge do
+  let(:from_vertex) { DirectedVertex.new(nil) }
+  let(:to_vertex) { DirectedVertex.new(nil) }
+  subject(:edge) { DirectedEdge.new(from_vertex, to_vertex) }
 
   describe '#initialize' do
     it 'stores a from_vertex' do

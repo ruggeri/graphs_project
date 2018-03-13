@@ -1,15 +1,15 @@
 require 'rspec'
-require '01_topological_sort'
+require '02_topological_sort'
 
 describe 'TopologicalSort' do
-  let(:v1) { Vertex.new("Wash Markov") }
-  let(:v2) { Vertex.new("Feed Markov") }
-  let(:v3) { Vertex.new("Dry Markov") }
-  let(:v4) { Vertex.new("Brush Markov") }
-  let(:v5) { Vertex.new("Cuddle Markov") }
-  let(:v6) { Vertex.new("Walk Markov") }
-  let(:v7) { Vertex.new("Teach Markov") }
-  let(:v8) { Vertex.new("Worship Markov") }
+  let(:v1) { DirectedVertex.new("Wash Markov") }
+  let(:v2) { DirectedVertex.new("Feed Markov") }
+  let(:v3) { DirectedVertex.new("Dry Markov") }
+  let(:v4) { DirectedVertex.new("Brush Markov") }
+  let(:v5) { DirectedVertex.new("Cuddle Markov") }
+  let(:v6) { DirectedVertex.new("Walk Markov") }
+  let(:v7) { DirectedVertex.new("Teach Markov") }
+  let(:v8) { DirectedVertex.new("Worship Markov") }
 
   it "sorts two vertices" do
     vertices = [v1, v2]
@@ -18,7 +18,7 @@ describe 'TopologicalSort' do
       [v1.value, v2.value],
     ]
 
-    Edge.new(v1, v2)
+    DirectedEdge.new(v1, v2)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -30,8 +30,8 @@ describe 'TopologicalSort' do
     ]
 
     # Linear order
-    Edge.new(v1, v2)
-    Edge.new(v2, v3)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v2, v3)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -44,8 +44,8 @@ describe 'TopologicalSort' do
     ]
 
     # Inward triangle
-    Edge.new(v1, v2)
-    Edge.new(v3, v2)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v3, v2)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -58,8 +58,8 @@ describe 'TopologicalSort' do
     ]
 
     # Outward triangle
-    Edge.new(v1, v2)
-    Edge.new(v1, v3)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v1, v3)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -72,10 +72,10 @@ describe 'TopologicalSort' do
     ]
 
     # Diamond
-    Edge.new(v1, v2)
-    Edge.new(v1, v3)
-    Edge.new(v2, v4)
-    Edge.new(v3, v4)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v1, v3)
+    DirectedEdge.new(v2, v4)
+    DirectedEdge.new(v3, v4)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -87,11 +87,11 @@ describe 'TopologicalSort' do
     ]
 
     # Diamond with diagonal
-    Edge.new(v1, v2)
-    Edge.new(v1, v3)
-    Edge.new(v3, v2)
-    Edge.new(v2, v4)
-    Edge.new(v3, v4)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v1, v3)
+    DirectedEdge.new(v3, v2)
+    DirectedEdge.new(v2, v4)
+    DirectedEdge.new(v3, v4)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -103,12 +103,12 @@ describe 'TopologicalSort' do
     ]
 
     # Diamond with diagonal
-    Edge.new(v1, v2)
-    Edge.new(v1, v3)
-    Edge.new(v3, v2)
-    Edge.new(v2, v4)
-    Edge.new(v3, v4)
-    Edge.new(v1, v4)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v1, v3)
+    DirectedEdge.new(v3, v2)
+    DirectedEdge.new(v2, v4)
+    DirectedEdge.new(v3, v4)
+    DirectedEdge.new(v1, v4)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -121,14 +121,14 @@ describe 'TopologicalSort' do
     ]
 
     # Diamond with final triangle
-    Edge.new(v1, v2)
-    Edge.new(v1, v3)
-    Edge.new(v3, v2)
-    Edge.new(v2, v4)
-    Edge.new(v3, v4)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v1, v3)
+    DirectedEdge.new(v3, v2)
+    DirectedEdge.new(v2, v4)
+    DirectedEdge.new(v3, v4)
 
-    Edge.new(v4, v5)
-    Edge.new(v4, v6)
+    DirectedEdge.new(v4, v5)
+    DirectedEdge.new(v4, v6)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -145,8 +145,8 @@ describe 'TopologicalSort' do
     ]
 
     # Two one-step dependencies.
-    Edge.new(v1, v2)
-    Edge.new(v3, v4)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v3, v4)
     expect(solutions).to include(topological_sort(vertices).map{ |vert| vert.value})
   end
 
@@ -155,9 +155,9 @@ describe 'TopologicalSort' do
     vertices.shuffle!
 
     # Cycle
-    Edge.new(v1, v2)
-    Edge.new(v2, v3)
-    Edge.new(v3, v1)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v2, v3)
+    DirectedEdge.new(v3, v1)
     expect(topological_sort(vertices)).to eq(nil)
   end
 
@@ -166,10 +166,10 @@ describe 'TopologicalSort' do
     vertices.shuffle!
 
     # Cycle
-    Edge.new(v1, v2)
-    Edge.new(v2, v3)
-    Edge.new(v3, v4)
-    Edge.new(v4, v1)
+    DirectedEdge.new(v1, v2)
+    DirectedEdge.new(v2, v3)
+    DirectedEdge.new(v3, v4)
+    DirectedEdge.new(v4, v1)
     expect(topological_sort(vertices)).to eq(nil)
   end
 end
