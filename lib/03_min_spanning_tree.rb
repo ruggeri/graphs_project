@@ -1,4 +1,4 @@
-require '00_graph'
+require '01_undirected_graph'
 
 def prims_algorithm(vertices)
   start_vertex = vertices[0]
@@ -10,8 +10,8 @@ def prims_algorithm(vertices)
   }
   fringe = {}
 
-  start_vertex.out_edges.each do |e|
-    fringe[e.to_vertex] = e
+  start_vertex.edges.each do |e|
+    fringe[e.other_vertex(start_vertex)] = e
   end
 
   until fringe.empty?
@@ -21,12 +21,13 @@ def prims_algorithm(vertices)
     visited_vertices[vertex] = true
     fringe.delete vertex
 
-    vertex.out_edges.each do |e|
-      next if visited_vertices[e.to_vertex]
+    vertex.edges.each do |e|
+      other_vertex = e.other_vertex(vertex)
+      next if visited_vertices[other_vertex]
 
-      current_edge = fringe[e.to_vertex]
+      current_edge = fringe[other_vertex]
       next if current_edge && current_edge.cost < e.cost
-      fringe[e.to_vertex] = e
+      fringe[other_vertex] = e
     end
   end
 

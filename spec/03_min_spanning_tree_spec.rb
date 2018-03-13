@@ -1,24 +1,24 @@
 require 'rspec'
-require '02_min_spanning_tree'
+require '03_min_spanning_tree'
 
 describe 'MinSpanningTree' do
-  let(:ny) { Vertex.new("New York") }
-  let(:sf) { Vertex.new("San Francisco") }
-  let(:la) { Vertex.new("Los Angeles") }
-  let(:chi) { Vertex.new("Chicago") }
-  let(:sea) { Vertex.new("Seattle")}
+  let(:ny) { UndirectedVertex.new("New York") }
+  let(:sf) { UndirectedVertex.new("San Francisco") }
+  let(:la) { UndirectedVertex.new("Los Angeles") }
+  let(:chi) { UndirectedVertex.new("Chicago") }
+  let(:sea) { UndirectedVertex.new("Seattle")}
 
   it "works on a trivial graph of two vertices" do
     vertices = [ny, sf]
-    e = Edge.new(ny, sf, 123)
+    e = UndirectedEdge.new(ny, sf, 123)
 
     expect(prims_algorithm(vertices)).to eq([e])
   end
 
   it "works on a trivial graph of three vertices" do
     vertices = [ny, sf, la]
-    e = Edge.new(ny, sf, 123)
-    e2 = Edge.new(sf, la, 123)
+    e = UndirectedEdge.new(ny, sf, 123)
+    e2 = UndirectedEdge.new(sf, la, 123)
 
     expect(prims_algorithm(vertices)).to match_array([e, e2])
   end
@@ -26,9 +26,9 @@ describe 'MinSpanningTree' do
   it "works on a cyclic graph of three vertices" do
     vertices = [ny, sf, la]
 
-    e = Edge.new(ny, sf, 123)
-    e2 = Edge.new(sf, la, 456)
-    e3 = Edge.new(la, ny, 789)
+    e = UndirectedEdge.new(ny, sf, 123)
+    e2 = UndirectedEdge.new(sf, la, 456)
+    e3 = UndirectedEdge.new(la, ny, 789)
 
     expect(prims_algorithm(vertices)).to match_array([e, e2])
   end
@@ -36,11 +36,11 @@ describe 'MinSpanningTree' do
   it "works on a diamond graph with diagonal" do
     vertices = [ny, sf, la, chi]
 
-    ny_sf = Edge.new(ny, sf, 1)
-    ny_chi = Edge.new(ny, chi, 3)
-    sf_chi = Edge.new(sf, chi, 2)
-    sf_la = Edge.new(sf, la, 4)
-    chi_la = Edge.new(chi, la, 5)
+    ny_sf = UndirectedEdge.new(ny, sf, 1)
+    ny_chi = UndirectedEdge.new(ny, chi, 3)
+    sf_chi = UndirectedEdge.new(sf, chi, 2)
+    sf_la = UndirectedEdge.new(sf, la, 4)
+    chi_la = UndirectedEdge.new(chi, la, 5)
 
     expect(prims_algorithm(vertices)).to match_array([
       ny_sf,
@@ -56,19 +56,18 @@ describe 'MinSpanningTree' do
     #     la
     # sf ==== sea
 
-    ny_la
-    ny_chi
-    ny_sf
-
-    ny_sf = Edge.new(ny, sf, 1)
-    ny_chi = Edge.new(ny, chi, 3)
-    sf_chi = Edge.new(sf, chi, 2)
-    sf_la = Edge.new(sf, la, 4)
-    chi_la = Edge.new(chi, la, 5)
+    ny_chi = UndirectedEdge.new(ny, chi, 1)
+    ny_la = UndirectedEdge.new(ny, la, 2)
+    sf_ny = UndirectedEdge.new(sf, ny, 7)
+    sf_la = UndirectedEdge.new(sf, la, 6)
+    la_chi = UndirectedEdge.new(la, chi, 5)
+    la_sea = UndirectedEdge.new(la, sea, 4)
+    chi_sea = UndirectedEdge.new(chi, sea, 3)
 
     expect(prims_algorithm(vertices)).to match_array([
-      ny_sf,
-      sf_chi,
+      ny_chi,
+      ny_la,
+      chi_sea,
       sf_la
     ])
   end
