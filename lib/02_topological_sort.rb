@@ -22,7 +22,7 @@ def topological_sort(vertices)
     end
   end
 
-  return nil if result.count < vertices.count
+  raise 'graph contains cycle' if result.count < vertices.count
   result
 end
 
@@ -53,13 +53,13 @@ end
 #       active_path[v] = true
 #
 #       v.out_edges.each do |e|
-#         return nil if active_path[e.to_vertex]
+#         raise 'graph contains cycle' if active_path[e.to_vertex]
 #         stack << e.to_vertex
 #       end
 #     end
 #   end
 #
-#   return nil if result.count < vertices.count
+#   raise 'graph contains cycle' if result.count < vertices.count
 #   result.reverse!
 #   result
 # end

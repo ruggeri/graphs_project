@@ -158,7 +158,9 @@ describe 'TopologicalSort' do
     DirectedEdge.new(v1, v2)
     DirectedEdge.new(v2, v3)
     DirectedEdge.new(v3, v1)
-    expect(topological_sort(vertices)).to eq(nil)
+    (expect do
+      topological_sort(vertices)
+    end).to raise_error('graph contains cycle')
   end
 
   it "detects when a trickier cycle exists" do
@@ -169,7 +171,10 @@ describe 'TopologicalSort' do
     DirectedEdge.new(v1, v2)
     DirectedEdge.new(v2, v3)
     DirectedEdge.new(v3, v4)
-    DirectedEdge.new(v4, v1)
-    expect(topological_sort(vertices)).to eq(nil)
+    DirectedEdge.new(v4, v2)
+
+    (expect do
+      topological_sort(vertices)
+    end).to raise_error('graph contains cycle')
   end
 end
