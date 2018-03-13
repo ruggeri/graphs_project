@@ -1,6 +1,6 @@
 require_relative '00_directed_graph'
 
-# Implementing topological sort using both Khan's and Tarian's algorithms
+# Implementing topological sort using Kahn's algorithm.
 
 def topological_sort(vertices)
   in_edge_counts = {}
@@ -25,6 +25,9 @@ def topological_sort(vertices)
   raise 'graph contains cycle' if result.count < vertices.count
   result
 end
+
+# Bonus: Implement topo sort with Tarjan's DFS algorithm. Do this
+# *after* implementing Prim's algorithm.
 
 # def topological_sort(vertices)
 #   result = []
