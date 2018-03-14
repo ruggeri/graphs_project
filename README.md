@@ -61,103 +61,48 @@ vertex.
 
 ## Bonus: Topological Sort: Tarjan Style
 
-**Big idea:** You do DFS until you hit a vertex with no children,
-pushing parent vertices onto the stack along the way. When you hit a
-vertex with no children, you add this vertex to the result and pop back
-up. If when you pop up you hit a vertex where all its children have
-been added to the result, you can pop that and add it. Otherwise you
-have to process the children of that parent vertex.
+**Big idea:** You do DFS. At each vertex, you make sure all the
+children are pushed into the result array before you push the parent
+in. If a child has already been added to the result array, you should
+skip re-processing it. Otherwise you must recurse.
 
-**Details:** We will use an explicit `stack`. We will not use
-recursion. Start out by iterating the vertices, pushing those with no
-in edges onto the stack.
+DFS can enter an infinite cycle of loops. If you ever hit a vertex in
+a deeper stack frame that you are currently processing in a higher up
+stack frame, you must raise an error.
 
-Now, we loop until the stack is empty. Each time, peek at the top
-vertex and go through each of its children. If all children are
-already in the result array, pop the vertex and add it to the result
-array.
+**Details:** Break the problem into two parts. `topological_sort_`
+should work from a single root vertex. `topological_sort` should iterate
+through the vertices and call `topological_sort_` on each vertex that
+has no in edges.
 
-Else, push each child that is not in the result array already onto the
-stack.
+`topological_sort_` needs four arguments:
 
-**Tarjan Problem #1**
+1. A vertex.
+2. The result array to push into.
+3. A hash map called `added_to_result` to allow `O(1)` checking whether
+   a vertex has been added to the result array. Why is
+   `result.include?(vertex)` not ideal?
+4. A hash map called `active_path` which records which vertices are
+   currently being processed "on the stack."
 
-There are two possible problems. First, what if the top vertex is
-already added to the result? For instance:
+In `topological_sort_`, the first thing you do is add the vertex to the
+`active_path` since you are processing it.
 
-```
-A => B
-A => C
-C => B
-C => D
-```
+Then, go through the out edges. If you have already added a child
+vertex to the result you can move on. If you hit a child vertex that
+is on the active path, why does this mean there is a cycle? Raise an
+error in that case.
 
-Consider the run:
+Else, call `topological_sort_` recursively on the child vertex to
+process it and all its dependencies.
 
-```
-Push A
-Push B
-Push C
-Push B
-Push D
-```
+After processing all children, you may add the parent vertex to the
+result. Make sure to record this in the hash map too.
 
-Notice that `B` is pushed twice. That is okay and inevitable. You must
-push `B` that second time, otherwise you would not list it before `C`.
+Last, right before returning from `topological_sort_`, remove the
+parent vertex from the active path hash. We are done processing it and
+the stack frame is being popped.
 
-The solution is that when you peek at `B` the first pushed `B` (after
-having added the second pushed `B` to the result), you should just pop
-the first pushed `B` and skip it without adding it again.
+## Bonus2: Topological Sort: Tarjan Style with Explicit Stack
 
-Thus the solution is to not add a vertex to the result if it is already
-in the result.
-
-**Tarjan Problem #2**
-
-The other problem has to do with infinite looping:
-
-```
-A => B
-B => C
-C => A
-```
-
-results in:
-
-```
-Push A
-Push B
-Push C
-Push A
-Push B
-Push C
-...
-```
-
-You need to detect when this happens. You might assume that the correct
-solution is to check if a vertex is already in the stack, and then
-raise an error if we try to push it on again.
-
-However, the prior example shows a scenario where we *do* want to
-push the same vertex `B` twice. In the prior example we need to push it
-the second time so that `B` is added to the result before `C`.
-
-Here is the difference. In the cyclic example, we start processing A's
-children, and as part of that we start processing B's children, and
-as part of that we start processing C's children, which includes A.
-
-In the first example, we start processing A's children (adding B and
-C), then start processing C's children (which is just B), and then we
-start processing B's children (there are none). This second time we
-push B is different, because we are not "in the middle" of processing
-B from before, we are in the middle of processing *C*.
-
-The solution is to keep a second stack of "active" vertices we are in
-the middle of processing. Each time we add a vertices children, we
-should mark that parent vertex as "active." If we ever try to
-add an active vertex onto the stack a second time, we know we hit a
-loop.
-
-Each time we pop a vertex and push it into the result because we have
-finished processing all of its children, we should also mark it as
-inactive.
+Repeat the above, but without using recursion. Explicitly use a stack.
