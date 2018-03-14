@@ -29,36 +29,32 @@ end
 # Bonus: Implement topo sort with Tarjan's DFS algorithm. Do this
 # *after* implementing Prim's algorithm.
 
+# def topological_sort_(vertex, result, added_to_result, active_path)
+#   active_path[vertex] = true
+#
+#   vertex.out_edges.each do |e|
+#     to_vertex = e.to_vertex
+#     next if added_to_result[to_vertex]
+#     raise 'graph contains cycle' if active_path[to_vertex]
+#
+#     topological_sort_(to_vertex, result, added_to_result, active_path)
+#   end
+#
+#   result << vertex
+#   added_to_result[vertex] = true
+#   active_path[vertex] = false
+#
+#   nil
+# end
+#
 # def topological_sort(vertices)
 #   result = []
 #   added_to_result = {}
-#   stack = []
 #   active_path = {}
 #
 #   vertices.each do |v|
 #     if v.in_edges.count == 0
-#       stack << v
-#     end
-#   end
-#
-#   until stack.empty?
-#     v = stack.pop
-#
-#     next if added_to_result[v]
-#
-#     if v.out_edges.all? { |e| added_to_result[e.to_vertex] }
-#       active_path.delete(v)
-#
-#       result << v
-#       added_to_result[v] = true
-#     else
-#       stack << v
-#       active_path[v] = true
-#
-#       v.out_edges.each do |e|
-#         raise 'graph contains cycle' if active_path[e.to_vertex]
-#         stack << e.to_vertex
-#       end
+#       topological_sort_(v, result, added_to_result, active_path)
 #     end
 #   end
 #
