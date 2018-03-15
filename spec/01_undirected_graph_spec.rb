@@ -65,7 +65,7 @@ describe UndirectedEdge do
 
     it "complains about wrong vertex" do
       (expect do
-        edge.other_vertex(DirectedVertex.new('bogus vertex'))
+        edge.other_vertex(UndirectedVertex.new('bogus vertex'))
       end).to raise_error("vertex is at neither end")
     end
   end
