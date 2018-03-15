@@ -15,7 +15,7 @@ describe DirectedVertex do
     end
 
     it 'initially sets out_edges as an empty array' do
-      expect(vertex.in_edges).to be_an_instance_of(Array)
+      expect(vertex.out_edges).to be_an_instance_of(Array)
       expect(vertex.out_edges).to be_empty
     end
   end
